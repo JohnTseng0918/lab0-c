@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "list.h"
 
 #include "queue.h"
 
@@ -14,7 +15,9 @@
 /* Create an empty queue */
 struct list_head *q_new()
 {
-    return NULL;
+    struct list_head *list_ptr = malloc(sizeof(struct list_head));
+    INIT_LIST_HEAD(list_ptr);
+    return list_ptr;
 }
 
 /* Free all storage used by queue */
@@ -23,12 +26,20 @@ void q_free(struct list_head *head) {}
 /* Insert an element at head of queue */
 bool q_insert_head(struct list_head *head, char *s)
 {
+    element_t *ele_ptr = malloc(sizeof(element_t));
+    ele_ptr->value = strdup(s);
+    struct list_head *list_ptr = &ele_ptr->list;
+    list_add(list_ptr, head);
     return true;
 }
 
 /* Insert an element at tail of queue */
 bool q_insert_tail(struct list_head *head, char *s)
 {
+    element_t *ele_ptr = malloc(sizeof(element_t));
+    ele_ptr->value = strdup(s);
+    struct list_head *list_ptr = &ele_ptr->list;
+    list_add_tail(list_ptr, head);
     return true;
 }
 
@@ -47,7 +58,11 @@ element_t *q_remove_tail(struct list_head *head, char *sp, size_t bufsize)
 /* Return number of elements in queue */
 int q_size(struct list_head *head)
 {
-    return -1;
+    int count = 0;
+    struct list_head *ptr = NULL;
+    list_for_each (ptr, head)
+        count++;
+    return count;
 }
 
 /* Delete the middle node in queue */
