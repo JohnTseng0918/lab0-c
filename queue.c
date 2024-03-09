@@ -21,7 +21,16 @@ struct list_head *q_new()
 }
 
 /* Free all storage used by queue */
-void q_free(struct list_head *head) {}
+void q_free(struct list_head *head)
+{
+    struct list_head *ptr, *safe;
+    list_for_each_safe (ptr, safe, head) {
+        element_t *ele_ptr = list_entry(ptr, element_t, list);
+        free(ele_ptr->value);
+        free(ele_ptr);
+    }
+    free(head);
+}
 
 /* Insert an element at head of queue */
 bool q_insert_head(struct list_head *head, char *s)
