@@ -79,7 +79,10 @@ element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
         return NULL;
     struct list_head *ptr = head->next;
     element_t *ele_ptr = list_entry(ptr, element_t, list);
-    memcpy(sp, ele_ptr->value, bufsize);
+    if (sp != NULL && bufsize > 0) {
+        strncpy(sp, ele_ptr->value, bufsize - 1);
+        sp[bufsize - 1] = '\0';
+    }
     list_del(ptr);
     return ele_ptr;
 }
